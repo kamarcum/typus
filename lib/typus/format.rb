@@ -26,7 +26,7 @@ module Typus
 
       options = { :conditions => @conditions, :batch_size => 1000 }
 
-      data = ::FasterCSV.generate(:col_sep => ';') do |csv|
+      data = ::FasterCSV.generate do |csv|
         csv << fields.keys
         @resource.find_in_batches(options) do |records|
           records.each do |record|
