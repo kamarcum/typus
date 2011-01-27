@@ -63,8 +63,12 @@ module Admin
     def build_pagination
       options = { :order => @model_to_relate.typus_order_by, :conditions => set_conditions }
       items_per_page = @model_to_relate.typus_options_for(:per_page)
-      data = @resource.unscoped.find(params[:id]).send(@field).all(options)
-      @items = data.paginate(:per_page => items_per_page, :page => params[:page])
+      if(params[:id])
+        data = @resource.unscoped.find(params[:id]).send(@field).all(options)
+        @items = data.paginate(:per_page => items_per_page, :page => params[:page])
+      else
+        @items = []
+      end
     end
 
     def build_relate_form
@@ -112,7 +116,7 @@ module Admin
       setup_relationship(field)
 
       @items = Array.new
-      if item = @resource.find(params[:id]).send(field)
+      if params[:id] && (item = @resource.find(params[:id]).send(field))
         @items << item
       end
 
